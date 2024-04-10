@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Some custom styling */
+    body {
+      background-color: #f8f9fa;
+    }
+    .registration-form {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .registration-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="registration-form">
+          <h2>Registration</h2>
+          <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+            <div class="mb-3">
+              <label for="uname" class="form-label">Username</label>
+              <input type="text" class="form-control" id="uname" th:field="*{uname}" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" th:field="*{email}" required>
+            </div>
+            <div class="mb-3">
+              <label for="phoneNo" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="phoneNo" th:field="*{phoneNo}" required>
+            </div>
+            <div class="mb-3">
+              <label for="pwd" class="form-label">Password</label>
+              <input type="password" class="form-control" id="pwd" th:field="*{pwd}" required>
+            </div>
+            <div class="mb-3">
+              <label for="updatedPwd" class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" id="updatedPwd" th:field="*{updatedPwd}" required>
+            </div>
+            <!-- Dropdowns for country, state, and city -->
+            
+            <div class="col-md-4">
+            <h2>Select Country</h2>
+            <select class="form-select" id="country" onchange="fetchStates()">
+                <option value="">Select Country</option>
+                <option th:each="country : ${countries}" th:value="${country.cid}" th:text="${country.cname}"></option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <h2>States</h2>
+            <select class="form-select" id="states" onchange="fetchCities()">
+                <option value="">Select State</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <h2>Cities</h2>
+            <select class="form-select" id="cities">
+                <option value="">Select City</option>
+            </select>
+        </div>
+            
+     <!--        <div class="mb-3">
+              <label for="country" class="form-label">Country</label>
+              <select class="form-select" id="country" th:field="*{countryEntity}" required>
+
+                <option value="">Select Country</option>
+               
+                                
+                            <th:block th:each="country : ${countries}">
+                                <option th:value="${country.cid}" th:text="${country.cname}"></option>
+                            </th:block>
+              </select>
+            </div>
+          <div class="mb-3">
+              <label for="state" class="form-label">State</label>
+              <select class="form-select" id="state" th:field="*{stateEntity}" required>
+              
+                <option value="">Select State</option>
+                
+                             <th:block th:each="state : ${states}">
+                                <option th:value="${country.sid}" th:text="${state.sname}"></option>
+                            </th:block>
+                            
+              </select>
+            </div> -->
+            
+        <!--        <div class="mb-3">
+              <label for="city" class="form-label">City</label>
+              <select class="form-select" id="city" th:field="*{cityEntity}" required>
+                
+                <option value="">Select City</option>
+                          <th:block th:each="city: ${cities}">
+                                <option th:value="${city.cityid}" th:text="${city.cityName}"></option>
+                            </th:block>
+                           
+              </select>
+            </div>
+              -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    function fetchStates() {
+        var countryId = $('#country').val();
+        $.ajax({
+            type: 'GET',
+            url: '/states/' + cid,
+            success: function (states) {
+                var options = '<option value="">Select State</option>';
+                for (var i = 0; i < states.length; i++) {
+                    options += '<option value="' + states[i].sid + '">' + states[i].sname + '</option>';
+                }
+                $('#states').html(options);
+            }
+        });
+    }
+
+    function fetchCities() {
+        var stateId = $('#states').val();
+        $.ajax({
+            type: 'GET',
+            url: '/cities/' + sid,
+            success: function (cities) {
+                var options = '<option value="">Select City</option>';
+                for (var i = 0; i < cities.length; i++) {
+                    options += '<option value="' + cities[i].cityid + '">' + cities[i].cityname + '</option>';
+                }
+                $('#cities').html(options);
+            }
+        });
+    }
+</script>
+  
+  
+</body>
+</html>

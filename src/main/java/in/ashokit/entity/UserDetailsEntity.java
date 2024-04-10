@@ -13,9 +13,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "User_Details")
 public class UserDetailsEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +33,20 @@ public class UserDetailsEntity {
 	@UpdateTimestamp
 	private LocalDate updatedDate;
 	
-	@OneToOne(targetEntity = CountryEntity.class,
-							 cascade = CascadeType.ALL,
-							 fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = CountryEntity.class)
 	@JoinColumn(name = "country_id",referencedColumnName = "cid")
 	private CountryEntity countryEntity;
+	
+	@ManyToOne(targetEntity = StateEntity.class)
+	@JoinColumn(name = "state_id",referencedColumnName = "sid")
+	private StateEntity stateEntity;
+	
+	@ManyToOne(targetEntity = CityEntity.class)
+	@JoinColumn(name = "city_id",referencedColumnName = "cityid")
+	private CityEntity cityEntity;
+	public UserDetailsEntity() {
+		super();
+	}
 
 	public UserDetailsEntity(Integer uid, String uname, String email, Long phoneNo, String pwd, String updatedPwd,
 			LocalDate createdDate, LocalDate updatedDate) {
@@ -97,5 +109,37 @@ public class UserDetailsEntity {
 	public void setUpdatedDate(LocalDate updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+
+	public CountryEntity getCountryEntity() {
+		return countryEntity;
+	}
+
+	public void setCountryEntity(CountryEntity countryEntity) {
+		this.countryEntity = countryEntity;
+	}
+
+	public StateEntity getStateEntity() {
+		return stateEntity;
+	}
+
+	public void setStateEntity(StateEntity stateEntity) {
+		this.stateEntity = stateEntity;
+	}
+
+	public CityEntity getCityEntity() {
+		return cityEntity;
+	}
+
+	public void setCityEntity(CityEntity cityEntity) {
+		this.cityEntity = cityEntity;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDetailsEntity [uid=" + uid + ", uname=" + uname + ", email=" + email + ", phoneNo=" + phoneNo
+				+ ", pwd=" + pwd + ", updatedPwd=" + updatedPwd + ", createdDate=" + createdDate + ", updatedDate="
+				+ updatedDate + ", countryEntity=" + countryEntity + "]";
+	}
+	
 
 }
